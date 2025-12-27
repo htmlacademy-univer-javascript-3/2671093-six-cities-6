@@ -8,12 +8,14 @@ import NotFound from '../../pages/NotFound/not-found';
 import PrivateRoute from '../private-route/private-route';
 
 import { Offer as OfferType } from '../../types/offer';
+import { Review } from '../../types/review';
 
 type AppProps = {
   offers: OfferType[];
+  reviews: Review[];
 };
 
-function App({ offers }: AppProps): JSX.Element {
+function App({ offers, reviews }: AppProps): JSX.Element {
   const isAuth = false;
 
   const favoriteOffers = offers.filter((offer) => offer.isFavorite);
@@ -31,7 +33,10 @@ function App({ offers }: AppProps): JSX.Element {
             </PrivateRoute>
           }
         />
-        <Route path="/offer/:id" element={<Offer offers={offers} />} />
+        <Route
+          path="/offer/:id"
+          element={<Offer offers={offers} reviews={reviews} />}
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
@@ -39,3 +44,4 @@ function App({ offers }: AppProps): JSX.Element {
 }
 
 export default App;
+

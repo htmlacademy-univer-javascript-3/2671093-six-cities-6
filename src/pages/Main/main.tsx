@@ -98,7 +98,7 @@ function Main({ offers }: MainProps): JSX.Element {
                   </li>
                 </ul>
               </form>
-              <PlaceList offers={amsterdamOffers} />
+              <PlaceList cities={amsterdamOffers} />
             </section>
             <div className="cities__right-section">
               {/* Подключаем компонент карты */}
