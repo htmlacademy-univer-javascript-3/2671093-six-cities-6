@@ -53,7 +53,7 @@ function Favorites({ offers }: FavoritesProps): JSX.Element {
                   </div>
                   <div className="favorites__places">
                     {offers.filter((o) => o.city.name === city).map((offer) => (
-                      <PlaceCard key={offer.id} offer={offer} />
+                      <PlaceCard key={offer.id} cardInfo={offer} typeClassName="favorites__card" />
                     ))}
                   </div>
                 </li>

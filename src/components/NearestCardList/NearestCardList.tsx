@@ -2,20 +2,18 @@ import PlaceCard from '../PlaceCard/PlaceCard';
 import { CardListProps } from '../../types/card-list';
 import { CardType } from '../../const';
 
-function PlaceList({ cities }: CardListProps): JSX.Element {
+function NearestCardList({ cities }: CardListProps): JSX.Element {
   return (
-    <div className="cities__places-list places__list tabs__content">
+    <div className="near-places__list places__list">
       {cities.map((city) => (
         <PlaceCard
           key={city.id}
           cardInfo={city}
-          typeClassName={CardType.regular}
+          typeClassName={CardType.nearest}
         />
       ))}
     </div>
   );
 }
 
-export default PlaceList;
-
-
+export default NearestCardList;
