@@ -3,14 +3,14 @@ import { Offer } from '../../types/offer';
 import { formatRating } from '../../utils';
 import { useAppDispatch } from '../../hooks';
 import { setSelectedPoint } from '../../store/action';
-import { memo, useCallback } from 'react';
+import { useCallback } from 'react';
 
 type PlaceCardProps = {
   cardInfo: Offer;
   typeClassName: string;
 };
 
-function PlaceCard({ cardInfo, typeClassName }: PlaceCardProps): JSX.Element {
+export function PlaceCard({ cardInfo, typeClassName }: PlaceCardProps) {
   const { id, title, type, price, isFavorite, isPremium, rating, previewImage } = cardInfo;
   const dispatch = useAppDispatch();
 
@@ -74,7 +74,6 @@ function PlaceCard({ cardInfo, typeClassName }: PlaceCardProps): JSX.Element {
   );
 }
 
-export default memo(PlaceCard);
-
+export default PlaceCard;
 
 

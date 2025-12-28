@@ -3,9 +3,9 @@ import { CardListProps } from '../../types/card-list';
 import { CardType } from '../../const';
 import { getSortedOffers } from '../../utils';
 import { useAppSelector } from '../../hooks';
-import { useMemo, memo } from 'react';
+import { useMemo } from 'react';
 
-function PlaceList({ offers }: CardListProps): JSX.Element {
+export function PlaceList({ offers }: CardListProps) {
   const selectedSortType: string = useAppSelector((state) => state.selectedSortType);
 
   const sortedOffers = useMemo(() => getSortedOffers(offers, selectedSortType), [offers, selectedSortType]);
@@ -19,6 +19,6 @@ function PlaceList({ offers }: CardListProps): JSX.Element {
   );
 }
 
-export default memo(PlaceList);
+export default PlaceList;
 
 

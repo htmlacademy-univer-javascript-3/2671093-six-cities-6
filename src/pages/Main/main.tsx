@@ -4,20 +4,7 @@ import CitiesList from '../../components/CitiesList/CitiesList';
 import SortingBlock from '../../components/SortingBlock/SortingBlock';
 import { Cities } from '../../const';
 import { useAppSelector } from '../../hooks';
-import { Offer } from '../../types/offer';
-import { createSelector } from '@reduxjs/toolkit';
-import { StateType } from '../../store/reducer';
-
-// Селекторы
-const selectOffersList = (state: StateType) => state.offersList;
-const selectCity = (state: StateType) => state.city;
-const selectSelectedPoint = (state: StateType) => state.selectedPoint;
-
-// Мемоизированный селектор для предложений текущего города
-export const selectCurrentCityOffers = createSelector(
-  [selectOffersList, selectCity],
-  (offersList: Offer[], city: string) => offersList.filter((offer) => offer.city.name === city)
-);
+import { selectCurrentCityOffers, selectCity, selectSelectedPoint } from '../../store/selectors';
 
 function Main(): JSX.Element {
   const city = useAppSelector(selectCity);
