@@ -77,3 +77,4 @@ function PlaceCard({ cardInfo, typeClassName }: PlaceCardProps): JSX.Element {
 export default memo(PlaceCard);
 
 
+
