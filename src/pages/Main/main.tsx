@@ -1,25 +1,15 @@
-import { useEffect, useState } from 'react';
 import CitiesMap from '../../components/CitiesMap/CitiesMap';
 import PlaceList from '../../components/PlaceList/PlaceList';
 import CitiesList from '../../components/CitiesList/CitiesList';
 import SortingBlock from '../../components/SortingBlock/SortingBlock';
 import { Cities } from '../../const';
 import { useAppSelector } from '../../hooks';
-import { Offer } from '../../types/offer';
+import { selectCurrentCityOffers, selectCity, selectSelectedPoint } from '../../store/selectors';
 
 function Main(): JSX.Element {
-  const offers = useAppSelector((state) => state.offersList);
-  const city = useAppSelector((state) => state.city);
-  const selectedPoint = useAppSelector((state) => state.selectedPoint);
-
-  const [currentCityOffers, setCurrentCityOffers] = useState<Offer[]>([]);
-
-  useEffect(() => {
-    const filteredOffers = offers.filter(
-      (offer) => offer.city.name === city
-    );
-    setCurrentCityOffers(filteredOffers);
-  }, [city, offers]);
+  const city = useAppSelector(selectCity);
+  const selectedPoint = useAppSelector(selectSelectedPoint);
+  const currentCityOffers = useAppSelector(selectCurrentCityOffers);
 
   return (
     <div className="page page--gray page--main">

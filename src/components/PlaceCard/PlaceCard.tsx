@@ -3,30 +3,25 @@ import { Offer } from '../../types/offer';
 import { formatRating } from '../../utils';
 import { useAppDispatch } from '../../hooks';
 import { setSelectedPoint } from '../../store/action';
+import { useCallback } from 'react';
 
 type PlaceCardProps = {
   cardInfo: Offer;
   typeClassName: string;
 };
 
-function PlaceCard({ cardInfo, typeClassName }: PlaceCardProps): JSX.Element {
-  const {
-    id,
-    title,
-    type,
-    price,
-    isFavorite,
-    isPremium,
-    rating,
-    previewImage,
-  } = cardInfo;
+export function PlaceCard({ cardInfo, typeClassName }: PlaceCardProps) {
+  const { id, title, type, price, isFavorite, isPremium, rating, previewImage } = cardInfo;
   const dispatch = useAppDispatch();
+
+  const handleMouseOver = useCallback(() => dispatch(setSelectedPoint({ title })), [dispatch, title]);
+  const handleMouseLeave = useCallback(() => dispatch(setSelectedPoint(null)), [dispatch]);
 
   return (
     <article
       className={`${typeClassName} place-card`}
-      onMouseOver={() => dispatch(setSelectedPoint({ title }))}
-      onMouseLeave={() => dispatch(setSelectedPoint(null))}
+      onMouseOver={handleMouseOver}
+      onMouseLeave={handleMouseLeave}
     >
       {isPremium && (
         <div className="place-card__mark">
@@ -36,13 +31,7 @@ function PlaceCard({ cardInfo, typeClassName }: PlaceCardProps): JSX.Element {
 
       <div className="cities__image-wrapper place-card__image-wrapper">
         <Link to={`/offer/${id}`}>
-          <img
-            className="place-card__image"
-            src={previewImage}
-            width={260}
-            height={200}
-            alt="Place image"
-          />
+          <img className="place-card__image" src={previewImage} width={260} height={200} alt="Place image" />
         </Link>
       </div>
 
