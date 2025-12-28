@@ -1,39 +1,29 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
 import Main from '../../pages/Main/main';
 import Login from '../../pages/Login/login';
 import Favorites from '../../pages/Favorites/favorites';
 import Offer from '../../pages/Offer/offer';
 import NotFound from '../../pages/NotFound/not-found';
 import PrivateRoute from '../private-route/private-route';
-import { Review } from '../../types/review';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { useEffect } from 'react';
-import { fetchOffersAction } from '../../store/api-actions';
+import { fetchOffersAction, checkAuthAction } from '../../store/api-actions';
 import Spinner from '../spinner/spinner';
+import { AuthorizationStatus } from '../../const';
 
-type AppProps = {
-  reviews: Review[];
-};
-
-function App({ reviews }: AppProps): JSX.Element {
+function App(): JSX.Element {
   const dispatch = useAppDispatch();
-  const offers = useAppSelector((state) => state.offersList);
   const isLoading = useAppSelector((state) => state.isOffersLoading);
+  const authStatus = useAppSelector((state) => state.authorizationStatus);
 
   useEffect(() => {
     dispatch(fetchOffersAction());
+    dispatch(checkAuthAction());
   }, [dispatch]);
 
-  if (isLoading) {
+  if (isLoading || authStatus === AuthorizationStatus.Unknown) {
     return <Spinner />;
   }
-
-  if (!isLoading && offers.length === 0) {
-    return <Spinner />;
-  }
-
-  const favoriteOffers = offers.filter((offer) => offer.isFavorite);
-  const isAuth = false;
 
   return (
     <BrowserRouter>
@@ -43,15 +33,12 @@ function App({ reviews }: AppProps): JSX.Element {
         <Route
           path="/favorites"
           element={
-            <PrivateRoute isAuth={isAuth}>
-              <Favorites offers={favoriteOffers} />
+            <PrivateRoute>
+              <Favorites />
             </PrivateRoute>
           }
         />
-        <Route
-          path="/offer/:id"
-          element={<Offer offers={offers} reviews={reviews} />}
-        />
+        <Route path="/offer/:id" element={<Offer />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
