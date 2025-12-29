@@ -1,33 +1,20 @@
-import { useAppSelector } from '../../hooks';
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import PlaceCard from '../../components/PlaceCard/PlaceCard';
+import { fetchFavoritesAction } from '../../store/api-actions';
 
 function Favorites(): JSX.Element {
-  const offers = useAppSelector((state) =>
-    state.offersList.filter((offer) => offer.isFavorite)
-  );
+  const dispatch = useAppDispatch();
+  const offers = useAppSelector((state) => state.favorites);
 
-  const cities = Array.from(new Set(offers.map((o) => o.city.name)));
+  useEffect(() => {
+    dispatch(fetchFavoritesAction());
+  }, [dispatch]);
+
+  const cities = Array.from(new Set(offers.map((offer) => offer.city.name)));
 
   return (
     <div className="page">
-      <header className="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <div className="header__left">
-              <a className="header__logo-link" href="/">
-                <img
-                  className="header__logo"
-                  src="img/logo.svg"
-                  alt="6 cities logo"
-                  width={81}
-                  height={41}
-                />
-              </a>
-            </div>
-          </div>
-        </div>
-      </header>
-
       <main className="page__main page__main--favorites">
         <div className="page__favorites-container container">
           <section className="favorites">
@@ -38,15 +25,15 @@ function Favorites(): JSX.Element {
                 <li key={city} className="favorites__locations-items">
                   <div className="favorites__locations locations locations--current">
                     <div className="locations__item">
-                      <a className="locations__item-link" href="#">
-                        <span>{city}</span>
-                      </a>
+                      <span className="locations__item-link">
+                        {city}
+                      </span>
                     </div>
                   </div>
 
                   <div className="favorites__places">
                     {offers
-                      .filter((o) => o.city.name === city)
+                      .filter((offer) => offer.city.name === city)
                       .map((offer) => (
                         <PlaceCard
                           key={offer.id}
@@ -61,18 +48,6 @@ function Favorites(): JSX.Element {
           </section>
         </div>
       </main>
-
-      <footer className="footer container">
-        <a className="footer__logo-link" href="/">
-          <img
-            className="footer__logo"
-            src="img/logo.svg"
-            alt="6 cities logo"
-            width={64}
-            height={33}
-          />
-        </a>
-      </footer>
     </div>
   );
 }
