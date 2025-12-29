@@ -7,16 +7,18 @@ import {
   fetchOfferAction,
   fetchNearbyOffersAction,
   fetchCommentsAction,
-  postCommentAction
+  postCommentAction,
+  fetchFavoritesAction,
+  toggleFavoriteAction,
 } from './api-actions';
 import { Offer } from '../types/offer';
 import { AuthorizationStatus } from '../const';
 import { Comment } from '../types/comment';
 
-// Экспортируем тип состояния
 export type StateType = {
   city: string;
   offersList: Offer[];
+  favorites: Offer[];
   selectedSortType: string;
   selectedPoint: { title: string } | null;
   isOffersLoading: boolean;
@@ -31,6 +33,7 @@ export type StateType = {
 const initialState: StateType = {
   city: 'Paris',
   offersList: [],
+  favorites: [],
   selectedSortType: 'Popular',
   selectedPoint: null,
   isOffersLoading: false,
@@ -54,7 +57,7 @@ export const reducer = createReducer(initialState, (builder) => {
       state.selectedPoint = payload;
     })
 
-    // fetch all offers
+    // offers
     .addCase(fetchOffersAction.pending, (state) => {
       state.isOffersLoading = true;
     })
@@ -67,7 +70,7 @@ export const reducer = createReducer(initialState, (builder) => {
       state.isOffersLoading = false;
     })
 
-    // offer
+    // single offer
     .addCase(fetchOfferAction.pending, (state) => {
       state.isOfferLoading = true;
     })
@@ -91,6 +94,24 @@ export const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(postCommentAction.fulfilled, (state, { payload }) => {
       state.comments = payload;
+    })
+
+    // favorites
+    .addCase(fetchFavoritesAction.fulfilled, (state, { payload }) => {
+      state.favorites = payload;
+    })
+    .addCase(toggleFavoriteAction.fulfilled, (state, { payload }) => {
+      const updateOffers = (offers: Offer[]) =>
+        offers.map((offer) =>
+          offer.id === payload.id ? payload : offer
+        );
+
+      state.offersList = updateOffers(state.offersList);
+      state.nearbyOffers = updateOffers(state.nearbyOffers);
+
+      if (state.currentOffer?.id === payload.id) {
+        state.currentOffer = payload;
+      }
     })
 
     // auth

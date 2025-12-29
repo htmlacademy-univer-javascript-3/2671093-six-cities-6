@@ -79,3 +79,21 @@ export const postCommentAction = createAsyncThunk<
   return data;
 });
 
+export const fetchFavoritesAction = createAsyncThunk<
+  Offer[],
+  undefined,
+  ThunkApiConfig
+>('favorites/fetch', async (_arg, { extra: api }) => {
+  const { data } = await api.get<Offer[]>('/favorite');
+  return data;
+});
+
+export const toggleFavoriteAction = createAsyncThunk<
+  Offer,
+  { offerId: string; status: number },
+  ThunkApiConfig
+>('favorite/toggle', async ({ offerId, status }, { extra: api }) => {
+  const { data } = await api.post<Offer>(`/favorite/${offerId}/${status}`);
+  return data;
+});
+
